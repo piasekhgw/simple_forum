@@ -3,13 +3,12 @@ default: &default
   encoding: utf8
   pool: 5
   timeout: 5000
+  username: simple_forum
 
 development:
   <<: *default
-  username: simple_forum
   database: simple_forum_development
 
 test:
   <<: *default
-  username: simple_forum
   database: simple_forum_test
