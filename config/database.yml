@@ -1,0 +1,15 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  username: simple_forum
+  database: simple_forum_development
+
+test:
+  <<: *default
+  username: simple_forum
+  database: simple_forum_test
