@@ -1,25 +1,19 @@
 class UserRegistrationForm < ROM::Model::Form
 
   MAX_PASSWORD_LENGTH_ALLOWED = 50
+  EMAIL_REGEXP = /\A[^@\s]+@([^@\s]+\.)+[^@\W]+\z/
 
   commands users: :create
 
-  def self.create(attributes)
-    self.build(attributes).save
-  end
-
-  def persisted?
-    true
-  end
-
   input do
-    # set_model_name 'User'
+    set_model_name 'UserRegistration'
 
     attribute :email, String
     attribute :name, String
     attribute :password_digest, String
     attribute :password, String
     attribute :password_confirmation, String
+    timestamps
 
     def password=(unencrypted_password)
       super
@@ -30,8 +24,8 @@ class UserRegistrationForm < ROM::Model::Form
   validations do
     relation :users
 
-    validates :email, presence: true, uniqueness: true
-    # validates :name, presence: true
+    validates :email, presence: true, format: { with: EMAIL_REGEXP }, uniqueness: true
+    validates :name, presence: true
     validates :password, presence: true, length: { maximum: MAX_PASSWORD_LENGTH_ALLOWED }
     validates :password_confirmation, presence: true
     validate :password_confirmation_match, if: -> (record) { record.password_confirmation.present? }
@@ -43,8 +37,12 @@ class UserRegistrationForm < ROM::Model::Form
   end
 
   def commit!
-    users.try do
-      users.create.call(HashFunctions[:accept_keys, [:email, :name, :password_digest]].call(attributes))
-    end
+    users.try { users.create.call(command_input_transformation.call(attributes)) }
+  end
+
+  private
+
+  def command_input_transformation
+    Transproc::HashTransformations[:accept_keys, [:email, :name, :password_digest, :created_at, :updated_at]]
   end
 end

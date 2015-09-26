@@ -1,0 +1,9 @@
+.row
+  .col-md-12
+    %h2 Sign up
+    = simple_form_for user_registration do |form|
+      = form.input :email
+      = form.input :name
+      = form.input :password
+      = form.input :password_confirmation
+      = form.button :submit
