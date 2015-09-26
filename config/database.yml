@@ -3,7 +3,6 @@ default: &default
   encoding: utf8
   pool: 5
   timeout: 5000
-  username: simple_forum
 
 development:
   <<: *default

@@ -4,6 +4,14 @@ class UserRegistrationForm < ROM::Model::Form
 
   commands users: :create
 
+  def self.create(attributes)
+    self.build(attributes).save
+  end
+
+  def persisted?
+    true
+  end
+
   input do
     # set_model_name 'User'
 
@@ -23,7 +31,7 @@ class UserRegistrationForm < ROM::Model::Form
     relation :users
 
     validates :email, presence: true, uniqueness: true
-    validates :name, presence: true
+    # validates :name, presence: true
     validates :password, presence: true, length: { maximum: MAX_PASSWORD_LENGTH_ALLOWED }
     validates :password_confirmation, presence: true
     validate :password_confirmation_match, if: -> (record) { record.password_confirmation.present? }
