@@ -15,3 +15,8 @@ gem 'bcrypt-ruby', '~> 3.1.5', require: 'bcrypt'
 gem 'simple_form', '~> 3.2.0'
 gem 'haml-rails', '~> 0.9.0'
 gem 'bootstrap-sass', '~> 3.3.5.1'
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.3.3'
+  gem 'database_cleaner', '~> 1.5.0'
+end
